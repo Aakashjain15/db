@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Faculty Information</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>EMP ID</th>
+                    <th>Domains</th>
+                    <th>Email</th>
+                    <th>Max Teams</th>
+                    <th>Total Batches</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for faculty in data %}
+                <tr>
+                    <td>{{ faculty['Name'] }}</td>
+                    <td>{{ faculty['Designation'] }}</td>
+                    <td>{{ faculty['EMP_ID'] }}</td>
+                    <td>{{ ", ".join(faculty['Domains']) }}</td>
+                    <td>{{ faculty['University_Email_ID'] }}</td>
+                    <td>{{ faculty['Max_Teams'] }}</td>
+                    <td>{{ faculty['Total_Batches'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/">Go Back</a>
+    </div>
+</body>
+</html>

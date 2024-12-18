@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Faculty</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Faculty Information</h1>
+        <form action="/" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="designation">Designation:</label>
+            <input type="text" id="designation" name="designation" required>
+            
+            <label for="emp_id">EMP ID:</label>
+            <input type="number" id="emp_id" name="emp_id" required>
+            
+            <label for="domains">Domains (comma-separated):</label>
+            <input type="text" id="domains" name="domains" required>
+            
+            <label for="email">University Email ID:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="max_teams">Max Teams:</label>
+            <input type="number" id="max_teams" name="max_teams" required>
+            
+            <label for="total_batches">Total Batches:</label>
+            <input type="number" id="total_batches" name="total_batches" required>
+            
+            <button type="submit">Add Faculty</button>
+        </form>
+        <a href="/display">View All Faculty</a>
+    </div>
+</body>
+</html>
