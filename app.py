@@ -1,40 +1,47 @@
+from flask import Flask, render_template, request, redirect, url_for, flash
 from pymongo import MongoClient
+
+app = Flask(__name__)
+app.secret_key = "supersecretkey"
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
-db = client["university_db"]  # Database name
-collection = db["faculty_info"]  # Collection name
+db = client["university_db"]
+collection = db["faculty_info"]
 
-# Function to get faculty data from user and insert it into the database
-def get_and_insert_faculty_info():
-    print("Enter Faculty Information:")
+# Route for homepage and form
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        # Get form data
+        name = request.form["name"]
+        designation = request.form["designation"]
+        emp_id = int(request.form["emp_id"])
+        domains = request.form["domains"].split(",")
+        email = request.form["email"]
+        max_teams = int(request.form["max_teams"])
+        total_batches = int(request.form["total_batches"])
+        
+        # Save data to MongoDB
+        faculty_data = {
+            "Name": name,
+            "Designation": designation,
+            "EMP_ID": emp_id,
+            "Domains": [domain.strip() for domain in domains],
+            "University_Email_ID": email,
+            "Max_Teams": max_teams,
+            "Total_Batches": total_batches,
+        }
+        collection.insert_one(faculty_data)
+        flash("Faculty information added successfully!", "success")
+        return redirect(url_for("index"))
+    return render_template("index.html")
 
-    # Get input for each field
-    name = input("Name of Faculty: ")
-    designation = input("Designation: ")
-    emp_id = int(input("EMP ID: "))
-    domains = input("Domains (separated by commas): ").split(",")  # Convert to list
-    university_email_id = input("University Email ID: ")
-    image_link = input("Image Link: ")
-    max_teams = int(input("Max Teams: "))
-    total_batches = int(input("Total Batches: "))
+# Route to display all faculty data
+@app.route("/display")
+def display():
+    data = list(collection.find())
+    return render_template("display.html", data=data)
 
-    # Create a dictionary to store the data
-    faculty_data = {
-        "Name": name,
-        "Designation": designation,
-        "EMP_ID": emp_id,
-        "Domains": [domain.strip() for domain in domains],  # Clean up whitespace
-        "University_Email_ID": university_email_id,
-        "Image_Link": image_link,
-        "Max_Teams": max_teams,
-        "Total_Batches": total_batches
-    }
-
-    # Insert the data into the database
-    result = collection.insert_one(faculty_data)
-    print(f"Faculty information inserted with ID: {result.inserted_id}")
-
-# Call the function to insert data
 if __name__ == "__main__":
-    get_and_insert_faculty_info()
+    app.run(debug=True)
